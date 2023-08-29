@@ -1,10 +1,20 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Header from "./Header";
+import { checkvalidData } from "../utils/validate.js";
 
 const Login = () => {
   const [isSignInform, setisSignInform] = useState(true);
+  const [errorhandlemesage, seterrorhandlemessage] = useState();
+
+  const email = useRef(null);
+  const password = useRef(null);
+
   const toggleSignUpForm = () => {
     setisSignInform(!isSignInform);
+  };
+  const handleButtonClick = () => {
+    const message = checkvalidData(email.current.value, password.current.value);
+    seterrorhandlemessage(message);
   };
 
   return (
@@ -19,7 +29,10 @@ const Login = () => {
         />
       </div>
 
-      <form className="w-3/12 absolute p-12 bg-black my-36 mx-auto right-0 left-0 text-white bg-opacity-80">
+      <form
+        onSubmit={(e) => e.preventDefault()}
+        className="w-3/12 absolute p-12 bg-black my-36 mx-auto right-0 left-0 text-white bg-opacity-80"
+      >
         <h1 className="font-bold text-3xl py-4">
           {isSignInform ? "Sign In" : "Sign Up"}
         </h1>
@@ -32,17 +45,23 @@ const Login = () => {
         )}
 
         <input
+          ref={email}
           type="text"
           placeholder="Email Address"
           className="p-4 my-4 w-full bg-gray-500"
         ></input>
 
         <input
+          ref={password}
           type="password"
           placeholder="password"
           className="p-4 my-4 w-full bg-gray-500"
         ></input>
-        <button className="p-4 my-6 bg bg-red-700 w-full rounded-lg">
+        <p className="text-red-500 text-xl font-bold">{errorhandlemesage}</p>
+        <button
+          className="p-4 my-6 bg bg-red-700 w-full rounded-lg"
+          onClick={handleButtonClick}
+        >
           {isSignInform ? "Sign In" : "Sign Up"}
         </button>
         <p
